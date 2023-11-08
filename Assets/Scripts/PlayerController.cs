@@ -4,25 +4,46 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private static PlayerController Instance;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else Destroy(gameObject);
+    }
+
     public float movementSpeed = 10;
 
     private Rigidbody rb;
 
-    private void Awake()
+    private void Start()
     {
         rb = this.GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
-        rb.AddForce(Vector3.down, ForceMode.Acceleration);
+        rb.useGravity = true;
 
         float moveLR, moveFB;
         moveFB = Input.GetAxis("Vertical") * movementSpeed;
         moveLR = Input.GetAxis("Horizontal") * movementSpeed;
 
-        Debug.Log("moveFB" + moveFB + "moveLR" + moveLR);
+        //  Debug.Log("moveFB" + moveFB + "moveLR" + moveLR);
 
-        rb.velocity = new Vector3(moveLR, 0, moveFB);
+        rb.velocity = new Vector3(moveLR, rb.velocity.y, moveFB);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Tile"))
+        {
+            Transform newCenterTile = collision.transform;
+            LevelManager.Instance.centerTile = newCenterTile;
+            LevelManager.Instance.DetroyTiles();
+        }
     }
 }
