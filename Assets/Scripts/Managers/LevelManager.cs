@@ -26,11 +26,11 @@ public class LevelManager : MonoBehaviour
     {
         foreach (Transform tilePos in TilePos)
         {
-            int randomTile = Random.Range(0, TileTypes.Length);
-            int randomRotations = Random.Range(0, rotations.Length);
-            GameObject tile = Instantiate(TileTypes[randomTile], tilePos.position, Quaternion.Euler(0, rotations[randomRotations], 0));
+            CreateTiles(tilePos);
         }
     }
+
+
 
     public void DetroyTiles()
     {
@@ -38,17 +38,23 @@ public class LevelManager : MonoBehaviour
         {
             if (centerTile == null) return;
             else
+
             if (tiles.transform != centerTile)
             {
-                if (tiles.transform.position == centerTile.position + TilePos[0].position) newTiles[0] = tiles.transform;
-                else if (tiles.transform.position == centerTile.position + TilePos[1].position) newTiles[1] = tiles.transform;
-                else if (tiles.transform.position == centerTile.position + TilePos[2].position) newTiles[2] = tiles.transform;
-                else if (tiles.transform.position == centerTile.position + TilePos[3].position) newTiles[3] = tiles.transform;
-                else if (tiles.transform.position == centerTile.position + TilePos[5].position) newTiles[5] = tiles.transform;
-                else if (tiles.transform.position == centerTile.position + TilePos[6].position) newTiles[6] = tiles.transform;
-                else if (tiles.transform.position == centerTile.position + TilePos[7].position) newTiles[7] = tiles.transform;
-                else if (tiles.transform.position == centerTile.position + TilePos[8].position) newTiles[8] = tiles.transform;
+                Vector3[] newTilePos = new Vector3[TilePos.Length];
+                for (int i = 0; i < TilePos.Length; i++) newTilePos[i] = centerTile.position + TilePos[i].position;
+                
+                if      (tiles.transform.position == newTilePos[0]) newTiles[0] = tiles.transform;
+                else if (tiles.transform.position == newTilePos[1]) newTiles[1] = tiles.transform;
+                else if (tiles.transform.position == newTilePos[2]) newTiles[2] = tiles.transform;
+                else if (tiles.transform.position == newTilePos[3]) newTiles[3] = tiles.transform;
+                else if (tiles.transform.position == newTilePos[5]) newTiles[5] = tiles.transform;
+                else if (tiles.transform.position == newTilePos[6]) newTiles[6] = tiles.transform;
+                else if (tiles.transform.position == newTilePos[7]) newTiles[7] = tiles.transform;
+                else if (tiles.transform.position == newTilePos[8]) newTiles[8] = tiles.transform;
                 else Destroy(tiles);
+
+
             }
             else newTiles[4] = tiles.transform;
 
@@ -57,6 +63,25 @@ public class LevelManager : MonoBehaviour
             {
                 currentTiles[i] = newTiles[i];
             }
+        }
+    }
+
+    public void CreateTiles(Transform _TilePos)
+    {
+        int randomTile = Random.Range(0, TileTypes.Length);
+        int randomRotations = Random.Range(0, rotations.Length);
+        GameObject tile = Instantiate(TileTypes[randomTile], _TilePos.position, Quaternion.Euler(0, rotations[randomRotations], 0));
+        tile.transform.SetParent(_TilePos);
+    }
+
+    public void GridSetter()
+    {
+        Vector3[] test = new Vector3[TilePos.Length];
+        for(int i = 0; i < TilePos.Length; i++) test[i] = centerTile.position + TilePos[i].position;
+
+        foreach (GameObject tiles in GameObject.FindGameObjectsWithTag("Tile"))
+        {
+
         }
     }
 }
