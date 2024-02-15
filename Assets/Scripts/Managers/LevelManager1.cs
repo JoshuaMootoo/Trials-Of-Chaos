@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Analytics;
 
-public class LevelManager : MonoBehaviour
+public class LevelManager1 : MonoBehaviour
 {
     #region Instance
-    public static LevelManager Instance;
+    public static LevelManager1 Instance;
 
     private void Awake()
     {
@@ -22,9 +21,8 @@ public class LevelManager : MonoBehaviour
 
     [Header("Tile Gameplay Variables")]
     public Transform centerTile;
-    private GameObject[,] platforms = new GameObject[3, 3];
-    private float platformDistance;
 
+    
     public Transform[] TilePos = new Transform[9];
     public Transform[] currentTiles = new Transform[9];
     public Transform[] newTiles = new Transform[9];
@@ -33,41 +31,20 @@ public class LevelManager : MonoBehaviour
    
     private void Start()
     {
-        //foreach (Transform tilePos in TilePos) CreateTiles(tilePos.position);
-        //UpdatePlatforms()
+        foreach (Transform tilePos in TilePos) CreateTiles(tilePos.position);
     }
 
     #region Create Tile
-    private GameObject CreateTiles(int x, int y) // Used to Instantiate a random tile on a position (Vector3) 
+    public void CreateTiles(Vector3 _tilePos) // Used to Instantiate a random tile on a position (Vector3) 
     {
         int randomTile = Random.Range(0, TileTypes.Length);
         int randomRotations = Random.Range(0, rotations.Length);
-        return Instantiate(TileTypes[randomTile], new Vector3(x * platformDistance,0,y * platformDistance), Quaternion.Euler(0, rotations[randomRotations], 0));
+        GameObject tile = Instantiate(TileTypes[randomTile], _tilePos, Quaternion.Euler(0, rotations[randomRotations], 0));
     }
     #endregion
 
-    private void UpdatePlatforms(Transform centerPlatform)
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                Vector2Int gridPos = new Vector2Int((int)centerPlatform.position.x - 1 + i, (int)centerPlatform.position.z - 1 + j);
 
-                if (platforms[i,j] != null)
-                {
-                    Destroy(platforms[i,j]);
-                }
-
-                if (Mathf.Abs(gridPos.x - (int)centerPlatform.position.x) <= 1 && Mathf.Abs(gridPos.y - (int)centerPlatform.position.z) <= 1)
-                {
-                    platforms[i, j] = CreateTiles(gridPos.x, gridPos.y);
-                }
-            }
-        }
-    }
-
-    /*public void DetroyTiles()
+    public void DetroyTiles()
     {
         foreach (GameObject tiles in GameObject.FindGameObjectsWithTag("Tile"))
         {
@@ -93,5 +70,5 @@ public class LevelManager : MonoBehaviour
             //    currentTiles[i] = newTiles[i];
             //}
         }
-    }*/
+    }
 }

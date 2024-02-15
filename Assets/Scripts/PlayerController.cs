@@ -1,10 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    private static PlayerController Instance;
+   
+    public static PlayerController Instance { get; private set; }
+
+    private Gameplay input = null;
+    private Vector2 moveVector = Vector2.zero;
+
+    private Rigidbody rb = null;
+    public float movementSpeed = 10;
+
+    #region Awake Function
 
     private void Awake()
     {
@@ -13,37 +23,63 @@ public class PlayerController : MonoBehaviour
             Instance = this;
         }
         else Destroy(gameObject);
+
+        input = new Gameplay();
+    }
+    #endregion
+    #region On Enable/Disable
+    private void OnEnable()
+    {
+        input.Enable();
+        input.Player.Movement.performed += OnMovementPerformed;
+        input.Player.Movement.canceled += OnMovementCancelled;
     }
 
-    public float movementSpeed = 10;
+    private void OnDisable()
+    {
+        input.Disable();
+        input.Player.Movement.performed -= OnMovementPerformed;
+        input.Player.Movement.canceled -= OnMovementCancelled;
+    }
+    #endregion
 
-    private Rigidbody rb;
 
     private void Start()
     {
         rb = this.GetComponent<Rigidbody>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         rb.useGravity = true;
 
-        float moveLR, moveFB;
-        moveFB = Input.GetAxis("Vertical") * movementSpeed;
-        moveLR = Input.GetAxis("Horizontal") * movementSpeed;
-
-        //  Debug.Log("moveFB" + moveFB + "moveLR" + moveLR);
-
-        rb.velocity = new Vector3(moveLR, rb.velocity.y, moveFB);
+        rb.velocity = new Vector3(moveVector.x * movementSpeed, rb.velocity.y, moveVector.y * movementSpeed);
     }
+
+    #region Movement Controls
+    private void OnMovementPerformed(InputAction.CallbackContext value)
+    {
+        moveVector = value.ReadValue<Vector2>();
+        //GridManager.Instance.UpdateGrid();
+    }
+
+    private void OnMovementCancelled(InputAction.CallbackContext value)
+    {
+        moveVector = Vector2.zero;
+    }
+    #endregion
+
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Tile"))
+        if (collision.gameObject.CompareTag ("Tile"))
         {
-            Transform newCenterTile = collision.transform;
-            LevelManager.Instance.centerTile = newCenterTile;
-            LevelManager.Instance.DetroyTiles();
+            Debug.Log("Player collided with a tile!");
+            GridManager.Instance.PlayerHasMoved();
+            //Transform newCenterTile = collision.transform;
+            //LevelManager.Instance.centerTile = newCenterTile;
+            //LevelManager.Instance.DetroyTiles();
+            //GridManager.Instance.UpdateGrid();
         }
     }
 }
