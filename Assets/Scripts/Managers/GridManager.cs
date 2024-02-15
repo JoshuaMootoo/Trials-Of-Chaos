@@ -5,17 +5,21 @@ using UnityEngine;
 public class GridManager : MonoBehaviour
 {
     public static GridManager Instance { get; private set; }
-    
+
     private const int NumTileTypes = 4;                                 // Number of Tile Types
     private const int TileDistance = 50;                                // Tile Distance between eachother
     private const int LoadDistance = 1;                                 // Number of Tiles to load in each direction from the Current Center Tile
-    
+    private const int startHeight = 3;
+
     [Header("Tile Preset Variables")]
     public GameObject[] tileTypes = new GameObject[NumTileTypes];       // Array of Tile Type GameObjects
     private float[] possibleRotations = { 0, 90, 180, 270 };            // Array of Possible Tile Y Axis Rotations 
 
     private int gridSize = 3;                                           // Grid size 
     public GameObject[,] grid;
+
+    private Dictionary<Vector2Int, GameObject> loadedTiles = new Dictionary<Vector2Int, GameObject>();
+    private GameObject player;
 
     private void Awake()
     {
@@ -27,6 +31,9 @@ public class GridManager : MonoBehaviour
         else Destroy(gameObject);
         #endregion
 
+        // Looks for GameObject with "Player"
+        player = PlayerController.Instance.gameObject;
+
         InitializeGrid();
         PositionPlayerOnCenter();
     }
@@ -37,90 +44,83 @@ public class GridManager : MonoBehaviour
         grid = new GameObject[gridSize, gridSize];
     }
 
-    private void Start()
+    private void Update()
     {
-        UpdateGrid();
+        UpdateGridBasedOnPlayerPosition();
     }
-      
+
+    private void UpdateGridBasedOnPlayerPosition()                  // Used to update grid whenever the player moves onto another GridTile
+    {
+        if (player != null)
+        {
+            Vector2Int playerGridPos = GetGridPosition(player.transform.position);
+
+            // Load new tiles
+            for (int i = -LoadDistance; i <= LoadDistance; i++)
+            {
+                for (int j = -LoadDistance; j <= LoadDistance; j++)
+                {
+                    Vector2Int tilePos = new Vector2Int(playerGridPos.x + i, playerGridPos.y + j);
+
+                    if (!loadedTiles.ContainsKey(tilePos))
+                    {
+                        loadedTiles[tilePos] = CreateTile(tilePos.x, tilePos.y);
+                    }
+                }
+            }
+
+            // Unload tiles outside load distance
+            List<Vector2Int> tilesToRemove = new List<Vector2Int>();
+            foreach (var loadedTilePos in loadedTiles.Keys)
+            {
+                if (Mathf.Abs(loadedTilePos.x - playerGridPos.x) > LoadDistance || Mathf.Abs(loadedTilePos.y - playerGridPos.y) > LoadDistance)
+                {
+                    DestroyTile(loadedTilePos.x, loadedTilePos.y);
+                    tilesToRemove.Add(loadedTilePos);
+                }
+            }
+
+            foreach (var tilePosToRemove in tilesToRemove)
+            {
+                loadedTiles.Remove(tilePosToRemove);
+            }
+        }
+    }
+
+    private void PositionPlayerOnCenter()   // Sets the players initial position to be the initial center tile - used in the Awake Function
+    {
+        if (player != null)
+        {
+            int centerIndex = gridSize / 2;
+            Vector3 centerPosition = new Vector3(centerIndex * TileDistance, startHeight, centerIndex * TileDistance);
+
+            player.transform.position = centerPosition;
+        }
+        else Debug.LogError("Player GameObject not found. Make sure the player object has the correct name.");
+    }
+
     private GameObject CreateTile(int x, int y)                         // Used to Instantiate a random tile on a position
     {
         int randomPlatform = Random.Range(0, tileTypes.Length);
         int randomRotations = Random.Range(0, possibleRotations.Length);
         Debug.Log(x + "," + y);
-        return Instantiate(tileTypes[randomPlatform], 
-                           new Vector3(x * TileDistance, 0, y * TileDistance), 
-                           Quaternion.Euler(0, possibleRotations[randomRotations], 0));
+        GameObject tile = Instantiate(tileTypes[randomPlatform], new Vector3(x * TileDistance, 0, y * TileDistance), Quaternion.Euler(0, possibleRotations[randomRotations], 0));
+        return tile;
     }
 
-    private void DestroyTile(int x, int y)                              // Used to Destroy Tile GameObjects
+    private void DestroyTile(int x, int y)                              // Used to Destroy Tile Game Objects
     {
-        if (grid[x, y] != null)
+        if (loadedTiles.ContainsKey(new Vector2Int(x, y)))
         {
-            Destroy(grid[x, y]);
-            grid[x, y] = null;
+            Destroy(loadedTiles[new Vector2Int(x, y)]);
+            loadedTiles.Remove(new Vector2Int(x, y));
         }
     }
 
-    public void UpdateGrid()
+    private Vector2Int GetGridPosition(Vector3 worldPosition)           // Used to get the Grids Position in World Space using the players position
     {
-        Debug.Log("Updating Grid...");
-        for (int i = 0; i < gridSize; i++)
-        {
-            for (int j = 0; j < gridSize; j++)
-            {
-                if (grid[i,j] == null)
-                {
-                    grid[i,j] = CreateTile(i, j);
-                }
-            }
-        }
-    }
-    private void UpdateGridBasedOnPlayerPosition()
-    {
-        GameObject player = PlayerController.Instance.gameObject;
-
-        if (player != null)
-        {
-            int playerX = Mathf.RoundToInt(player.transform.position.x / TileDistance);
-            int playerZ = Mathf.RoundToInt(player.transform.position.z / TileDistance);
-
-            for (int i = 0; i < gridSize; i++)
-            {
-                for (int j = 0; j < gridSize; j++)
-                {
-                    if (Mathf.Abs(playerX - i) > 1 || Mathf.Abs(playerZ - j) > 1)
-                    {
-                        DestroyTile(i, j);
-                    }
-                    else if (grid[i, j] == null)
-                    {
-                        grid[i, j] = CreateTile(i, j);
-                    }
-                }
-            }
-        }
-    }
-
-    private void PositionPlayerOnCenter()
-    {
-        // Looks for GameObject with "Player"
-        GameObject player = PlayerController.Instance.gameObject;
-
-        if (player != null)
-        {
-            int centerIndex = gridSize / 2;
-            Vector3 centerPosition = new Vector3(centerIndex * TileDistance, 0, centerIndex * TileDistance);
-
-            player.transform.position = centerPosition;
-        }
-        else
-        {
-            Debug.LogError("Player GameObject not found. Make sure the player object has the correct name.");
-        }
-    }
-
-    public void PlayerHasMoved()
-    {
-        UpdateGridBasedOnPlayerPosition();
+        int x = Mathf.RoundToInt(worldPosition.x / TileDistance);
+        int y = Mathf.RoundToInt(worldPosition.z / TileDistance);
+        return new Vector2Int(x, y);
     }
 }

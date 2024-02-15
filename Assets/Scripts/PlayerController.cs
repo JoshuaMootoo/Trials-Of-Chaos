@@ -5,8 +5,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-   
-    public static PlayerController Instance { get; private set; }
+
+    public static PlayerController Instance;
 
     private Gameplay input = null;
     private Vector2 moveVector = Vector2.zero;
@@ -68,18 +68,4 @@ public class PlayerController : MonoBehaviour
         moveVector = Vector2.zero;
     }
     #endregion
-
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag ("Tile"))
-        {
-            Debug.Log("Player collided with a tile!");
-            GridManager.Instance.PlayerHasMoved();
-            //Transform newCenterTile = collision.transform;
-            //LevelManager.Instance.centerTile = newCenterTile;
-            //LevelManager.Instance.DetroyTiles();
-            //GridManager.Instance.UpdateGrid();
-        }
-    }
 }
