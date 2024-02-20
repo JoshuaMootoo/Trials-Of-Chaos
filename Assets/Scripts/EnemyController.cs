@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [Serializable]
@@ -11,44 +10,50 @@ public class EnemyStats
     public bool isLightMelee;
     public bool isHeavyMelee;
     public bool isRanged;
+    public bool isBoss;
 
     [Header("Health")]
     public float currentHealth;
-    public float maxHealth;
     public float healthMultiplier = 1;
+    public float maxHealth;
 
     [Header("Attack")]
     public float damage;
-    public float flatDamage;
     public float damageMultiplier = 1;
+    public float flatDamage;
 
+    [Header("Move Speed")]
     public float moveSpeed;
+    public float moveSpeedMultiplier = 1;
+    public float flatMoveSpeed;
 }
 
 public class EnemyController : MonoBehaviour
 {
-    private PlayerController playerController;
+    private PlayerController player;
 
     public EnemyStats stats;
 
-    public float stopDistance = 2;
+    [SerializeField] private float stopDistance = 2;
+    [SerializeField] private float outOfBoundDistance = 75;
 
 
     private void Start()
     {
-        playerController = PlayerController.Instance;
+        player = PlayerController.Instance;
         InitializeStats();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        FollowPlayer(playerController.transform);
+        EnemyPosition();
     }
 
     private void InitializeStats()
     {
         stats.currentHealth = stats.maxHealth * stats.healthMultiplier;
         stats.damage = stats.flatDamage * stats.damageMultiplier;
+        stats.moveSpeed = stats.flatMoveSpeed * stats.moveSpeedMultiplier;
     }
 
     private void Attack()
@@ -56,29 +61,36 @@ public class EnemyController : MonoBehaviour
 
     }
 
-    private void FollowPlayer(Transform player)
+    private void EnemyPosition()
     {
-        //  Calcultates the vector direction that goes towards the player
-        Vector3 directionOfPlayer = new Vector3(player.position.x - transform.position.x, 0f, player.position.z - transform.position.z);
-
         //  Calculates the distance between the enemy and the player
-        float playerDistance = Vector3.Distance(transform.position, player.position);
+        float playerDistance = UnityEngine.Vector3.Distance(transform.position, player.transform.position);
 
-        //  Moves the player in the calculated vector direction at the enemys move speed
-        if (playerDistance > stopDistance) transform.Translate(directionOfPlayer * stats.moveSpeed * Time.deltaTime);
+        FollowPlayer(playerDistance);
+        OutOfBound(playerDistance);
     }
 
-
-    private void OnDeath(bool isOutOfBound)
+    private void FollowPlayer(float playerDistance)
     {
-        if (isOutOfBound) 
-        { 
-            Respawn(); 
+        //  Calcultates the vector direction that goes towards the player
+        UnityEngine.Vector3 directionOfPlayer = new UnityEngine.Vector3(player.transform.position.x - transform.position.x, 0f, player.transform.position.z - transform.position.z);
+
+        //  Moves the player in the calculated vector direction at the enemys move speed
+        if (playerDistance > stopDistance) transform.Translate(directionOfPlayer * stats.moveSpeed * Time.fixedDeltaTime);
+    }
+
+    private void OutOfBound(float playerDistance)
+    {
+        if (playerDistance > outOfBoundDistance)
+        {
+            OnDeath();
         }
     }
 
-    private void Respawn()
+    private void OnDeath()
     {
 
     }
+
 }
+

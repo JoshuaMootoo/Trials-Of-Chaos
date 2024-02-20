@@ -12,11 +12,22 @@ public class Wave
 
 
     public int enemyCount;
-    public int bossCount; 
+    public int bossCount;
+    public bool isBossAlive;
 }
 
 public class WaveManager : MonoBehaviour
 {
+    public static WaveManager instance;
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else Destroy(gameObject);
+    }
+
     public Wave[] waves;
 
     public float spawnDelay = 1f;
@@ -27,32 +38,24 @@ public class WaveManager : MonoBehaviour
     public int waveIndex = 0;
     public float spawnDistance;
 
-    public float timer;
-
     private void Start()
     {
         StartCoroutine(SpawnWave());
     }
     private void Update()
     {
-        WaveTimer();
+        WaveTimer(GameManager.Instance.gameTimer);
     }
 
-    public void WaveTimer()
+    public void WaveTimer(float gameTimer)
     {
-        timer += Time.deltaTime;
+        int minutes = Mathf.FloorToInt(gameTimer / 60f);  // Calculates the timer in minutes
 
-        int minutes = Mathf.FloorToInt(timer / 60f);  // Calculate minutes
-        int seconds = Mathf.FloorToInt(timer % 60f);  // Calculate seconds
-
-        Debug.Log(minutes);
-
-        if (seconds == 0 && minutes > 0)
+        if (minutes > 0)    //  if the timer reaches a minute the wave progresses to the next wave
         {
             waveIndex++;
             StartCoroutine(SpawnWave());
-            timer = 0f;
-
+            gameTimer = 0f;
         }
     }
 
@@ -85,5 +88,9 @@ public class WaveManager : MonoBehaviour
         Instantiate(enemy, spawnPos, Quaternion.identity);
         if (!isBoss) currentEnemyCount++;
         else currentBossCount++;
+    }
+
+    private void DestroyEnemy(GameObject enemy, bool isBoss)
+    {
     }
 }
