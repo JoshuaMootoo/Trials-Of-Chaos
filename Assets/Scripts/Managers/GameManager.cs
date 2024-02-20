@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,8 +20,6 @@ public class GameManager : MonoBehaviour
 
     public int playerScore;
 
-    public float gameTimer;
-
     private void Awake()
     {
         if (Instance == null)
@@ -30,16 +30,22 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
     }
 
+    private void Start()
+    {
+        currentState = GameStates.Playing;
+    }
+
     private void Update()
     {
         GameStateManager();
     }
 
+
     private void GameStateManager()
     {
         if (currentState == GameStates.Playing)
         {
-            gameTimer = Time.deltaTime;
+            TimerUpdate();
         }
     }
 
@@ -47,4 +53,38 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene(sceneIndex);
     }
+
+
+    
+    //------------------------------------------------------------------------------------
+    //                                      Game Timer
+    //------------------------------------------------------------------------------------
+    #region Game Timer
+    public bool isTimerRunning;
+    public float timer;
+
+    public int hours;
+    public int minutes;
+
+    private void TimerUpdate()
+    {
+        if (isTimerRunning)
+        {
+            timer += Time.deltaTime;
+
+            if (timer >= 60)
+            {
+                timer -= 60;
+                minutes++;
+            }
+
+            if (minutes >= 60)
+            {
+                minutes -= 60;
+                hours++;
+            }
+
+        }
+    }
+    #endregion 
 }

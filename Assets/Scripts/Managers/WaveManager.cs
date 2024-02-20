@@ -10,6 +10,10 @@ public class Wave
     public GameObject[] enemyPrefabs;
     public GameObject bossPrefab;
 
+    public float healthMultiplier;
+    public float damageMultiplier;
+    public float speedMultiplier;
+
 
     public int enemyCount;
     public int bossCount;
@@ -36,26 +40,26 @@ public class WaveManager : MonoBehaviour
     public int currentBossCount;
 
     public int waveIndex = 0;
+    [SerializeField] private int nextWaveMin;
     public float spawnDistance;
 
     private void Start()
     {
         StartCoroutine(SpawnWave());
+        nextWaveMin = GameManager.Instance.minutes + 1;
     }
     private void Update()
     {
-        WaveTimer(GameManager.Instance.gameTimer);
+        WaveTimer();
     }
 
-    public void WaveTimer(float gameTimer)
+    public void WaveTimer()
     {
-        int minutes = Mathf.FloorToInt(gameTimer / 60f);  // Calculates the timer in minutes
-
-        if (minutes > 0)    //  if the timer reaches a minute the wave progresses to the next wave
+        if (GameManager.Instance.minutes == nextWaveMin)    //  if the timer reaches a minute the wave progresses to the next wave
         {
+            nextWaveMin++;
             waveIndex++;
             StartCoroutine(SpawnWave());
-            gameTimer = 0f;
         }
     }
 
