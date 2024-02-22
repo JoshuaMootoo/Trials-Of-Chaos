@@ -68,9 +68,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5615930919344483290, guid: cce81ba735e0b6b4ab251a33837b58b3, type: 3}
+      propertyPath: isBoss
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5615930919344483290, guid: cce81ba735e0b6b4ab251a33837b58b3, type: 3}
+      propertyPath: enemyTraits
+      value: 
+      objectReference: {fileID: 11400000, guid: 68edb9c846e95414fb2970fb542fec83, type: 2}
+    - target: {fileID: 5615930919344483290, guid: cce81ba735e0b6b4ab251a33837b58b3, type: 3}
+      propertyPath: outOfBoundsDistance
+      value: 75
+      objectReference: {fileID: 0}
     - target: {fileID: 6116936281826530263, guid: cce81ba735e0b6b4ab251a33837b58b3, type: 3}
       propertyPath: m_Name
-      value: Enemy Variant
+      value: Enemy boss
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

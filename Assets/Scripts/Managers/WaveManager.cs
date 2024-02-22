@@ -22,12 +22,12 @@ public class Wave
 
 public class WaveManager : MonoBehaviour
 {
-    public static WaveManager instance;
+    public static WaveManager Instance;
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
         }
         else Destroy(gameObject);
     }

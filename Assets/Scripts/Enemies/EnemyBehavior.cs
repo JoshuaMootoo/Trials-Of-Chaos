@@ -23,7 +23,7 @@ public class EnemyBehavior : MonoBehaviour
     private void Start()
     {
         player = PlayerController.Instance;
-        waveManager = WaveManager.instance;
+        waveManager = WaveManager.Instance;
 
         InitialiseEnemy();
     }
@@ -44,6 +44,7 @@ public class EnemyBehavior : MonoBehaviour
     {
         //  This Calculates the Distance Between the Enemy and the Player
         float playerDistance = Vector3.Distance(transform.position, player.transform.position);
+        Debug.Log(playerDistance);
 
         //  This Calculates the Direction of the Player based on the Enemy Position
         Vector3 directionOfPlayer = new Vector3(player.transform.position.x - transform.position.x, 0f, player.transform.position.z - transform.position.z);
@@ -61,15 +62,20 @@ public class EnemyBehavior : MonoBehaviour
     public void TakeDamage(int damageAmount)
     {
         currentHealth -= damageAmount;
+        Debug.Log(enemyTraits.enemyName + " took " + damageAmount + " danage.");
+        
 
         if (currentHealth <= 0) 
         {
             OnDeath(isBoss);
-        }
+        } 
+        else Debug.Log(enemyTraits.enemyName + " has " + currentHealth + " health remaining");
     }
 
     public void OnDeath(bool isBoss)
     {
+        Debug.Log(enemyTraits.enemyName+ " has died");
+
         if (!isBoss) waveManager.currentEnemyCount -= 1;
         Destroy(gameObject);
     }

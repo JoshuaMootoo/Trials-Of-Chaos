@@ -103,7 +103,7 @@ public class GridManager : MonoBehaviour
     {
         int randomPlatform = Random.Range(0, tileTypes.Length);
         int randomRotations = Random.Range(0, possibleRotations.Length);
-        Debug.Log(x + "," + y);
+        // Debug.Log(x + "," + y);
         GameObject tile = Instantiate(tileTypes[randomPlatform], new Vector3(x * TileDistance, 0, y * TileDistance), Quaternion.Euler(0, possibleRotations[randomRotations], 0));
         return tile;
     }
