@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,10 +8,52 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance;
 
-    private Gameplay input = null;
+    private PlayerInputs input = null;
     private Vector2 moveVector = Vector2.zero;
 
+    private bool hasDodged = false;
+
+    private bool hasAttacked = false;
+
     private Rigidbody rb = null;
+
+    #region XP System
+    private int startLevel = 1;
+    private int startExp = 0;
+    private int startExpToNextLevel = 10;
+
+    public int level { get; private set; }
+    public int exp { get; private set; }
+    public int expToNextLevel { get; private set; }
+
+    public void LevelStartSetup()
+    {
+        level = startLevel;
+        exp = startExp;
+        expToNextLevel = startExpToNextLevel;
+    }
+
+    public void GainExp(int amount)
+    {
+        exp += amount;
+        if (exp >= expToNextLevel)
+        {
+            LevelUp();
+        }
+    }
+
+    public void LevelUp()
+    {
+        level++;
+
+        expToNextLevel = CalculateExpToNextLevel();
+    }
+
+    public int CalculateExpToNextLevel()
+    {
+        return expToNextLevel * 2;
+    }
+    #endregion
 
     [Header("Player Stats - Health")]
     public float currentHealth;
@@ -40,7 +83,7 @@ public class PlayerController : MonoBehaviour
         }
         else Destroy(gameObject);
 
-        input = new Gameplay();
+        input = new PlayerInputs();
     }
     #endregion
     private void Start()
@@ -61,6 +104,9 @@ public class PlayerController : MonoBehaviour
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref currentVelocity, turnSmoothTime);
             transform.rotation = Quaternion.Euler(0, angle, 0);
         }
+
+        Debug.Log(hasDodged);
+        Debug.Log(hasAttacked);
     }
 
     public void TakeDamage(int damageAmount)
@@ -89,26 +135,56 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         input.Enable();
-        input.Player.Movement.performed += OnMovementPerformed;
-        input.Player.Movement.canceled += OnMovementCancelled;
+        input.GamePlay.Movement.performed += OnMovementPerformed;
+        input.GamePlay.Movement.canceled += OnMovementCancelled;
+
+        input.GamePlay.Dodge.performed += OnDodgePerformed;
+        input.GamePlay.Dodge.canceled += OnDodgeCancelled;
+
+        input.GamePlay.Attack.performed += OnAttackPerformed;
+        input.GamePlay.Attack.canceled += OnAttackCancelled;
     }
 
     private void OnDisable()
     {
         input.Disable();
-        input.Player.Movement.performed -= OnMovementPerformed;
-        input.Player.Movement.canceled -= OnMovementCancelled;
+        input.GamePlay.Movement.performed -= OnMovementPerformed;
+        input.GamePlay.Movement.canceled -= OnMovementCancelled;
+
+        input.GamePlay.Dodge.performed -= OnDodgePerformed;
+        input.GamePlay.Dodge.canceled -= OnDodgeCancelled;
+
+        input.GamePlay.Attack.performed -= OnAttackPerformed;
+        input.GamePlay.Attack.canceled -= OnAttackCancelled;
     }
     #endregion
     #region Movement Controls
-    private void OnMovementPerformed(InputAction.CallbackContext value)
+    private void OnMovementPerformed(InputAction.CallbackContext context)
     {
-        moveVector = value.ReadValue<Vector2>();
+        moveVector = context.ReadValue<Vector2>();
     }
 
-    private void OnMovementCancelled(InputAction.CallbackContext value)
+    private void OnMovementCancelled(InputAction.CallbackContext context)
     {
         moveVector = Vector2.zero;
     }
     #endregion
+
+    public void OnDodgePerformed(InputAction.CallbackContext context)
+    {
+        hasDodged = context.ReadValueAsButton();
+    }
+    public void OnDodgeCancelled(InputAction.CallbackContext context)
+    {        
+        hasDodged = context.ReadValueAsButton();
+    }
+
+    public void OnAttackPerformed(InputAction.CallbackContext context)
+    {
+        hasAttacked = context.ReadValueAsButton();
+    }
+    public void OnAttackCancelled(InputAction.CallbackContext context)
+    {
+        hasAttacked = context.ReadValueAsButton();
+    }
 }

@@ -44,7 +44,7 @@ public class EnemyBehavior : MonoBehaviour
     {
         //  This Calculates the Distance Between the Enemy and the Player
         float playerDistance = Vector3.Distance(transform.position, player.transform.position);
-        Debug.Log(playerDistance);
+        //Debug.Log(playerDistance);
 
         //  This Calculates the Direction of the Player based on the Enemy Position
         Vector3 directionOfPlayer = new Vector3(player.transform.position.x - transform.position.x, 0f, player.transform.position.z - transform.position.z);

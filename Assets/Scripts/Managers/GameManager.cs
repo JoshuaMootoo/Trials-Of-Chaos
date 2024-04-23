@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public static GameStates currentState;
 
+    public int killCount;
+
     public int playerScore;
 
     private void Awake()
@@ -33,6 +35,13 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         currentState = GameStates.Playing;
+        if (currentState == GameStates.Playing)
+        {
+            if (PlayerController.Instance != null)
+            {
+                PlayerController.Instance.LevelStartSetup();
+            }
+        }
     }
 
     private void Update()

@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq; // Needed for ToList()
 
 public class GridManager : MonoBehaviour
 {
     public static GridManager Instance { get; private set; }
 
     private const int NumTileTypes = 4;                                 // Number of Tile Types
-    private const int TileDistance = 50;                                // Tile Distance between eachother
+    private const int TileDistance = 50;                                // Tile Distance between each other
     private const int LoadDistance = 1;                                 // Number of Tiles to load in each direction from the Current Center Tile
     private const int startHeight = 3;
 
@@ -38,7 +39,7 @@ public class GridManager : MonoBehaviour
         PositionPlayerOnCenter();
     }
 
-    // This is used Initalises the grid 
+    // This is used Initialises the grid 
     private void InitializeGrid()
     {
         grid = new GameObject[gridSize, gridSize];
@@ -71,7 +72,7 @@ public class GridManager : MonoBehaviour
 
             // Unload tiles outside load distance
             List<Vector2Int> tilesToRemove = new List<Vector2Int>();
-            foreach (var loadedTilePos in loadedTiles.Keys)
+            foreach (var loadedTilePos in loadedTiles.Keys.ToList())
             {
                 if (Mathf.Abs(loadedTilePos.x - playerGridPos.x) > LoadDistance || Mathf.Abs(loadedTilePos.y - playerGridPos.y) > LoadDistance)
                 {
@@ -87,7 +88,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    private void PositionPlayerOnCenter()   // Sets the players initial position to be the initial center tile - used in the Awake Function
+    private void PositionPlayerOnCenter()   // Sets the player's initial position to be the initial center tile - used in the Awake Function
     {
         if (player != null)
         {
@@ -99,7 +100,7 @@ public class GridManager : MonoBehaviour
         else Debug.LogError("Player GameObject not found. Make sure the player object has the correct name.");
     }
 
-    private GameObject CreateTile(int x, int y)                         // Used to Instantiate a random tile on a position
+    private GameObject CreateTile(int x, int y)                         // Used to Instantiate a random tile at a position
     {
         int randomPlatform = Random.Range(0, tileTypes.Length);
         int randomRotations = Random.Range(0, possibleRotations.Length);
@@ -117,7 +118,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    private Vector2Int GetGridPosition(Vector3 worldPosition)           // Used to get the Grids Position in World Space using the players position
+    private Vector2Int GetGridPosition(Vector3 worldPosition)           // Used to get the Grid's Position in World Space using the player's position
     {
         int x = Mathf.RoundToInt(worldPosition.x / TileDistance);
         int y = Mathf.RoundToInt(worldPosition.z / TileDistance);
