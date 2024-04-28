@@ -17,7 +17,7 @@ public class DemoScriptUI : MonoBehaviour
     private void Start()
     {
         gameManager = GameManager.Instance;
-        waveManager = WaveManager.Instance;
+        waveManager = FindFirstObjectByType<WaveManager>();
     }
     private void Update()
     {

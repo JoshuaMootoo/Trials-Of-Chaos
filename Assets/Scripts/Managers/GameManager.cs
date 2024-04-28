@@ -8,7 +8,9 @@ using UnityEngine.SceneManagement;
 public enum GameStates
 {
     Menu,
+    OnGameStart,
     Playing,
+    LevelUp,
     Paused,
     GameOver
 }
@@ -17,6 +19,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public static GameStates currentState;
+
+    public PlayerController player;
 
     public int killCount;
 
@@ -35,13 +39,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         currentState = GameStates.Playing;
-        if (currentState == GameStates.Playing)
-        {
-            if (PlayerController.Instance != null)
-            {
-                PlayerController.Instance.LevelStartSetup();
-            }
-        }
     }
 
     private void Update()
@@ -52,10 +49,30 @@ public class GameManager : MonoBehaviour
 
     private void GameStateManager()
     {
+        if (currentState == GameStates.OnGameStart)
+        {
+            player = FindFirstObjectByType<PlayerController>();
+            currentState = GameStates.Playing;
+        }
         if (currentState == GameStates.Playing)
         {
             TimerUpdate();
         }
+        if (currentState == GameStates.LevelUp)
+        {
+            LevelUp();
+        }
+        if (currentState == GameStates.Paused)
+        {
+            Pause();
+        }
+
+
+        if (currentState == GameStates.GameOver) 
+        {
+            GameOver();
+        }
+
     }
 
     public void LoadScene(int sceneIndex)
@@ -63,12 +80,33 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(sceneIndex);
     }
 
+    public void Pause()
+    {
+        Time.timeScale = 0f;
+    }
 
-    
+    public void Resume(bool wasPaused)
+    {
+        //  wasPaused is used for targeting what UI to turn off (Pause menu or Level Up Menu)
+
+        currentState = GameStates.Playing;
+        Time.timeScale = 1f;
+    }
+
+    public void LevelUp()
+    {
+        Time.timeScale = 0f;
+    }
+
+    public void GameOver()
+    {
+
+    }
+    #region Game Timer
     //------------------------------------------------------------------------------------
     //                                      Game Timer
     //------------------------------------------------------------------------------------
-    #region Game Timer
+    
     public bool isTimerRunning;
     public float timer;
 

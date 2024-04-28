@@ -14,7 +14,6 @@ public class Wave
     public float damageMultiplier;
     public float speedMultiplier;
 
-
     public int enemyCount;
     public int bossCount;
     public bool isBossAlive;
@@ -22,16 +21,6 @@ public class Wave
 
 public class WaveManager : MonoBehaviour
 {
-    public static WaveManager Instance;
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else Destroy(gameObject);
-    }
-
     public Wave[] waves;
 
     public float spawnDelay = 1f;
@@ -86,7 +75,7 @@ public class WaveManager : MonoBehaviour
     //  Used to Spawn Enemy/Boss 
     private void SpawnEnemy(GameObject enemy, bool isBoss)
     {
-        Vector3 playerPos = PlayerController.Instance.transform.position;
+        Vector3 playerPos = FindFirstObjectByType<PlayerController>().transform.position;
         Vector3 spawnPos = new Vector3(playerPos.x + UnityEngine.Random.Range(-spawnDistance, spawnDistance), 3, playerPos.z + UnityEngine.Random.Range(-spawnDistance, spawnDistance));
 
         Instantiate(enemy, spawnPos, Quaternion.identity);

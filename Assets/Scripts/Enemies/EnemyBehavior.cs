@@ -22,8 +22,8 @@ public class EnemyBehavior : MonoBehaviour
 
     private void Start()
     {
-        player = PlayerController.Instance;
-        waveManager = WaveManager.Instance;
+        player = Object.FindFirstObjectByType<PlayerController>();
+        waveManager = Object.FindFirstObjectByType<WaveManager>();
 
         InitialiseEnemy();
     }

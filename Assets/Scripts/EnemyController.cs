@@ -40,7 +40,7 @@ public class EnemyController : MonoBehaviour
 
     private void Start()
     {
-        player = PlayerController.Instance;
+        player = FindFirstObjectByType<PlayerController>();
         InitializeStats();
     }
 

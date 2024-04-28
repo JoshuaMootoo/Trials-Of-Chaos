@@ -5,8 +5,6 @@ using System.Linq; // Needed for ToList()
 
 public class GridManager : MonoBehaviour
 {
-    public static GridManager Instance { get; private set; }
-
     private const int NumTileTypes = 4;                                 // Number of Tile Types
     private const int TileDistance = 50;                                // Tile Distance between each other
     private const int LoadDistance = 1;                                 // Number of Tiles to load in each direction from the Current Center Tile
@@ -24,16 +22,8 @@ public class GridManager : MonoBehaviour
 
     private void Awake()
     {
-        #region Instance - Awake
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else Destroy(gameObject);
-        #endregion
-
         // Looks for GameObject with "Player"
-        player = PlayerController.Instance.gameObject;
+        player = FindFirstObjectByType<PlayerController>().gameObject;
 
         InitializeGrid();
         PositionPlayerOnCenter();
