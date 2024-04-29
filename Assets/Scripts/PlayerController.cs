@@ -50,6 +50,8 @@ public class PlayerController : MonoBehaviour
         maxHealth = startHealth;
         damage = startDamage;
         dodgeSpeed = startDodgeSpeed;
+
+        //weaponsNum = Random.Range(1, 4);
     }
 
     //------------------------------------------------------------------------------------
@@ -126,7 +128,7 @@ public class PlayerController : MonoBehaviour
             else weapons[i].SetActive(false);
         }
 
-        if (weaponNum == 3) anim.SetFloat("IdleBlend", 0.5f);
+        if (weaponNum == 3) anim.SetFloat("IdleBlend", 1f);
         else anim.SetFloat("IdleBlend", 0.0f);
 
         /*  Old Weapon Animation Setup;
@@ -208,6 +210,7 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("canAttack is " + canAttack + " and " + AttackButtonPressed);
                 if (canAttack && AttackButtonPressed)
                 {
+
                     rb.velocity = Vector3.zero;
                     if (weaponsNum == 1) PlayerSwordAttack();
                     if (weaponsNum == 2) PlayerAxeAttack();
@@ -232,8 +235,8 @@ public class PlayerController : MonoBehaviour
     public float damage;
 
     private float attackCooldown = 1;
-    private bool canAttack = true;
-    private bool AttackButtonPressed = false;
+    public bool canAttack = true;
+    public bool AttackButtonPressed = false;
 
     #region Weapon Animation Functions
     public void PlayerSwordAttack()
@@ -252,6 +255,7 @@ public class PlayerController : MonoBehaviour
     {
         canAttack = false;
         anim.SetTrigger("BowAttack");
+        weapons[2].transform.GetComponent<CrossbowManager>().OnShoot();
         StartCoroutine(ResetAttackCooldown());
     }
 
@@ -267,12 +271,12 @@ public class PlayerController : MonoBehaviour
     //  - Take Damage allows the player to take damage
     //  - OnDeath is the death function that is exicuted when the players health goes below 0
     #region Damage Functions
-    public void HealDamage(int healthAmount)
+    public void HealDamage(float healthAmount)
     {
         health += healthAmount;
         if (health > maxHealth) health = maxHealth;
     }
-    public void TakeDamage(int damageAmount)
+    public void TakeDamage(float damageAmount)
     {
         health -= damageAmount;
         Debug.Log("Player has took " + damageAmount + " damage");
@@ -349,6 +353,7 @@ public class PlayerController : MonoBehaviour
     {        
         DodgedButtonPressed = context.ReadValueAsButton();
     }
+
     #endregion
 
     #region Attack Controls

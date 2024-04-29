@@ -11,6 +11,7 @@ public class GridManager : MonoBehaviour
     private const int startHeight = 3;
 
     [Header("Tile Preset Variables")]
+    public Material[] tileSetMats = new Material[3];
     public GameObject[] tileTypes = new GameObject[NumTileTypes];       // Array of Tile Type GameObjects
     private float[] possibleRotations = { 0, 90, 180, 270 };            // Array of Possible Tile Y Axis Rotations 
 

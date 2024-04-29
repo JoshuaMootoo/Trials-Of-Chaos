@@ -10,9 +10,7 @@ public class Wave
     public GameObject[] enemyPrefabs;
     public GameObject bossPrefab;
 
-    public float healthMultiplier;
-    public float damageMultiplier;
-    public float speedMultiplier;
+    public float multiplier;
 
     public int enemyCount;
     public int bossCount;
@@ -59,31 +57,28 @@ public class WaveManager : MonoBehaviour
         if (currentWave.enemyCount != 0)
             while (currentEnemyCount < currentWave.enemyCount)
             {
-                SpawnEnemy(currentWave.enemyPrefabs[currentWave.enemyNum], false);
+                SpawnEnemy(currentWave.enemyPrefabs[currentWave.enemyNum],currentWave.multiplier, false);
 
                 yield return new WaitForSeconds(spawnDelay);
             }
         if (currentWave.bossCount != 0)
             while (currentBossCount < currentWave.bossCount)
             {
-                SpawnEnemy(currentWave.bossPrefab, true);
+                SpawnEnemy(currentWave.bossPrefab, currentWave.multiplier, true);
 
                 yield return new WaitForSeconds(spawnDelay);
             }
     }
 
     //  Used to Spawn Enemy/Boss 
-    private void SpawnEnemy(GameObject enemy, bool isBoss)
+    private void SpawnEnemy(GameObject enemy, float currentMultiplier, bool isBoss)
     {
         Vector3 playerPos = FindFirstObjectByType<PlayerController>().transform.position;
         Vector3 spawnPos = new Vector3(playerPos.x + UnityEngine.Random.Range(-spawnDistance, spawnDistance), 3, playerPos.z + UnityEngine.Random.Range(-spawnDistance, spawnDistance));
 
-        Instantiate(enemy, spawnPos, Quaternion.identity);
+        var enemyClone = Instantiate(enemy, spawnPos, Quaternion.identity);
+        enemyClone.GetComponent<EnemyBehavior>().multiplier = currentMultiplier;
         if (!isBoss) currentEnemyCount++;
         else currentBossCount++;
-    }
-
-    private void DestroyEnemy(GameObject enemy, bool isBoss)
-    {
     }
 }

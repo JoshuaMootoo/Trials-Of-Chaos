@@ -14,6 +14,7 @@ public class EnemyBehavior : MonoBehaviour
     public float currentHealth;
     public float damage;
     public float speed;
+    public float multiplier;
 
     [SerializeField] private bool isBoss;
 
@@ -22,17 +23,18 @@ public class EnemyBehavior : MonoBehaviour
 
     private void Start()
     {
-        player = Object.FindFirstObjectByType<PlayerController>();
-        waveManager = Object.FindFirstObjectByType<WaveManager>();
+        player = FindFirstObjectByType<PlayerController>();
+        waveManager = FindFirstObjectByType<WaveManager>();
 
         InitialiseEnemy();
     }
 
+
     private void InitialiseEnemy()
     {
-        currentHealth = enemyTraits.maxHealth * enemyTraits.healthMultiplier;
-        damage = enemyTraits.baseDamage * enemyTraits.damageMultiplier;
-        speed = enemyTraits.baseSpeed * enemyTraits.speedMultiplier;
+        currentHealth = enemyTraits.health * multiplier;
+        damage = enemyTraits.damage * multiplier;
+        speed = enemyTraits.speed * multiplier;
     }
 
     private void FixedUpdate()
@@ -59,7 +61,7 @@ public class EnemyBehavior : MonoBehaviour
     //                                      To Be Called
     //------------------------------------------------------------------------------------
 
-    public void TakeDamage(int damageAmount)
+    public void TakeDamage(float damageAmount)
     {
         currentHealth -= damageAmount;
         Debug.Log(enemyTraits.enemyName + " took " + damageAmount + " danage.");

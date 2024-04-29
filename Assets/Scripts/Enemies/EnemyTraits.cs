@@ -7,12 +7,8 @@ public class EnemyTraits : ScriptableObject
 {
     public string enemyName;
 
-    public float maxHealth;
-    public float healthMultiplier = 1;
 
-    public float baseDamage;
-    public float damageMultiplier = 1;
-    
-    public float baseSpeed;
-    public float speedMultiplier = 1;
+    public float health;
+    public float damage;    
+    public float speed;
 }
