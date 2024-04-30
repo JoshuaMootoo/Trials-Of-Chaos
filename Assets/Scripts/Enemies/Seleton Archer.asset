@@ -13,9 +13,6 @@ MonoBehaviour:
   m_Name: Seleton Archer
   m_EditorClassIdentifier: 
   enemyName: Seleton Archer
-  maxHealth: 10
-  healthMultiplier: 1
-  baseDamage: 5
-  damageMultiplier: 1
-  baseSpeed: 1
-  speedMultiplier: 1
+  health: 15
+  damage: 5
+  speed: 15

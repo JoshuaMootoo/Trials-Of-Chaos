@@ -13,9 +13,6 @@ MonoBehaviour:
   m_Name: Skeleton Brute
   m_EditorClassIdentifier: 
   enemyName: Skeleton Brute
-  maxHealth: 10
-  healthMultiplier: 1
-  baseDamage: 5
-  damageMultiplier: 1
-  baseSpeed: 1
-  speedMultiplier: 1
+  health: 20
+  damage: 10
+  speed: 10

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public enum GameStates
@@ -19,6 +20,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public static GameStates currentState;
+    bool isPlayerDead;
 
     public PlayerController player;
 
@@ -46,7 +48,6 @@ public class GameManager : MonoBehaviour
         GameStateManager();
     }
 
-
     private void GameStateManager()
     {
         if (currentState == GameStates.OnGameStart)
@@ -58,19 +59,13 @@ public class GameManager : MonoBehaviour
         {
             TimerUpdate();
         }
-        if (currentState == GameStates.LevelUp)
-        {
-            LevelUp();
-        }
         if (currentState == GameStates.Paused)
         {
             Pause();
         }
-
-
         if (currentState == GameStates.GameOver) 
         {
-            GameOver();
+            GameOver(isPlayerDead);
         }
 
     }
@@ -83,6 +78,14 @@ public class GameManager : MonoBehaviour
     public void Pause()
     {
         Time.timeScale = 0f;
+        if (isPlayerDead)
+        {
+
+        }
+        else
+        {
+
+        }
     }
 
     public void Resume(bool wasPaused)
@@ -93,14 +96,9 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-    public void LevelUp()
+    public void GameOver(bool hasDied)
     {
-        Time.timeScale = 0f;
-    }
-
-    public void GameOver()
-    {
-
+        Time.timeScale = 0;
     }
     #region Game Timer
     //------------------------------------------------------------------------------------

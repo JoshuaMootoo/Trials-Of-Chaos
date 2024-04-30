@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
 
     private PlayerState state;
 
-    private PlayerInputs input = null;
+    [SerializeField] private InputManager inputManager;
     
     //  Start Stats
     public float startHealth;
@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
         damage = startDamage;
         dodgeSpeed = startDodgeSpeed;
 
-        //weaponsNum = Random.Range(1, 4);
+        weaponsNum = Random.Range(1, 4);
     }
 
     //------------------------------------------------------------------------------------
@@ -108,7 +108,6 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        input = new PlayerInputs();
         PlayerStartStats();
         state = PlayerState.Normal;
     }
@@ -163,6 +162,9 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+
+        inputManager = InputManager.Instance;
+
         rb = this.GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
 
@@ -173,7 +175,25 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        switch(state)
+        moveVector = inputManager.MoveInput;
+        if (moveVector != Vector2.zero) anim.SetBool("IsMoving", true);
+        else anim.SetBool("IsMoving", false);
+
+        //  Dodge Button Check
+        DodgedButtonPressed = inputManager.DodgeInput;
+        if (DodgedButtonPressed)
+        {
+            dodgeVector = moveVector;
+            state = PlayerState.Dodging;
+        }
+
+        //  Attack Button Check;
+        Debug.Log("canAttack is " + canAttack + " and " + AttackButtonPressed);
+        AttackButtonPressed = inputManager.AttackInput;
+        if (canAttack && AttackButtonPressed) state = PlayerState.Attacking;
+        else state = PlayerState.Normal;
+
+        switch (state)
         {
             case PlayerState.Normal:
                 break;
@@ -207,16 +227,10 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
             case PlayerState.Attacking:
-                Debug.Log("canAttack is " + canAttack + " and " + AttackButtonPressed);
-                if (canAttack && AttackButtonPressed)
-                {
-
-                    rb.velocity = Vector3.zero;
-                    if (weaponsNum == 1) PlayerSwordAttack();
-                    if (weaponsNum == 2) PlayerAxeAttack();
-                    if (weaponsNum == 3) PlayerBowAttack();
-                }
-                if (!canAttack && AttackButtonPressed) state = PlayerState.Normal;
+                rb.velocity = Vector3.zero;
+                if (weaponsNum == 1) PlayerSwordAttack();
+                if (weaponsNum == 2) PlayerAxeAttack();
+                if (weaponsNum == 3) PlayerBowAttack();
                 break;
 
             case PlayerState.Dodging:
@@ -292,6 +306,7 @@ public class PlayerController : MonoBehaviour
     public void OnDeath() 
     {
         Debug.Log("Player has died");
+        GameManager.Instance.GameOver(true);
         Destroy(gameObject);
     }
     #endregion
@@ -299,7 +314,7 @@ public class PlayerController : MonoBehaviour
     //------------------------------------------------------------------------------------
     //                                 Player Input Controls
     //------------------------------------------------------------------------------------
-
+    /*
     #region On Enable/Disable
     private void OnEnable()
     {
@@ -367,4 +382,5 @@ public class PlayerController : MonoBehaviour
         AttackButtonPressed = context.ReadValueAsButton();
     }
     #endregion
+    */
 }

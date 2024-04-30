@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class EnemyBehavior : MonoBehaviour
 {
+    Animator anim;
+
     public EnemyTraits enemyTraits;
 
     private PlayerController player;
@@ -21,8 +23,11 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] private float stopDistance;
     [SerializeField] private float outOfBoundsDistance;
 
+    public GameObject EXPCrystal;
+
     private void Start()
     {
+        anim = GetComponent<Animator>();
         player = FindFirstObjectByType<PlayerController>();
         waveManager = FindFirstObjectByType<WaveManager>();
 
@@ -78,7 +83,22 @@ public class EnemyBehavior : MonoBehaviour
     {
         Debug.Log(enemyTraits.enemyName+ " has died");
 
-        if (!isBoss) waveManager.currentEnemyCount -= 1;
+        GameManager.Instance.killCount++;
+
+        anim.SetBool("isDead", true);
+
+        if (!isBoss)
+        {
+            waveManager.currentEnemyCount -= 1;
+            Instantiate(EXPCrystal, transform.position, Quaternion.identity);
+        }
+        else GameManager.Instance.GameOver(false);
+        StartCoroutine(WaitToDestroy());
+    }
+
+    IEnumerator WaitToDestroy()
+    {
+        yield return new WaitForSeconds(1);
         Destroy(gameObject);
     }
 }

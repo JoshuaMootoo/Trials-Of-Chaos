@@ -13,9 +13,6 @@ MonoBehaviour:
   m_Name: Skeleton Knight
   m_EditorClassIdentifier: 
   enemyName: Skeleton Knight
-  maxHealth: 10
-  healthMultiplier: 1
-  baseDamage: 5
-  damageMultiplier: 1
-  baseSpeed: 0.5
-  speedMultiplier: 1
+  health: 40
+  damage: 20
+  speed: 5

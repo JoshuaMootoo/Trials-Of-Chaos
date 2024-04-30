@@ -7,16 +7,17 @@ TagManager:
   - Tile
   - WaveManager
   - LevelManager
+  - Level
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Level
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Enemy
+  - Player Weapon
+  - Ground
   - 
   - 
   - 
