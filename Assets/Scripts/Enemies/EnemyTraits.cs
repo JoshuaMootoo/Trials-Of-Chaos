@@ -11,5 +11,5 @@ public class EnemyTraits : ScriptableObject
     public float damage;    
     public float speed;
 
-    public int score;
+    public int scoreAmount;
 }

@@ -24,6 +24,7 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] private float outOfBoundsDistance;
 
     public GameObject EXPCrystal;
+    public GameObject HealthItem;
 
     private void Start()
     {
@@ -59,7 +60,7 @@ public class EnemyBehavior : MonoBehaviour
         if (playerDistance > stopDistance) transform.Translate(directionOfPlayer * speed * Time.fixedDeltaTime);
 
         //  This triggers the Death Function if the distance Between the Player Exceeds the outOfBoundsDistance
-        if (playerDistance > outOfBoundsDistance) OnDeath(isBoss);
+        if (playerDistance > outOfBoundsDistance && !isBoss) OnDeath(isBoss);
     }
 
     //------------------------------------------------------------------------------------
@@ -91,6 +92,8 @@ public class EnemyBehavior : MonoBehaviour
         {
             waveManager.currentEnemyCount -= 1;
             Instantiate(EXPCrystal, transform.position, Quaternion.identity);
+            float healthSpawnChance = Random.Range(0, 100);
+            if (healthSpawnChance <= 90) Instantiate(HealthItem, transform.position, Quaternion.identity);
         }
         else GameManager.Instance.GameOver(false);
         StartCoroutine(WaitToDestroy());

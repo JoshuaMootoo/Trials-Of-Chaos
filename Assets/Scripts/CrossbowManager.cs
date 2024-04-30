@@ -18,5 +18,6 @@ public class CrossbowManager : MonoBehaviour
     {
         var arrow = Instantiate(arrowPrefab, crossbowPos.position, player.transform.rotation);
         arrow.GetComponent<Rigidbody>().velocity = transform.forward * arrowSpeed;
+        arrow.GetComponent<PlayerArrowController>().damage = player.damage;
     }
 }

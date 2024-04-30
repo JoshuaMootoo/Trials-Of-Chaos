@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviour
 
     public int playerScore;
 
+    public bool isFinalWave = false;
+
     private void Awake()
     {
         if (Instance == null)

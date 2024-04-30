@@ -1,18 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameplayUI : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    GameManager gameManager;
+    WaveManager waveManager;
 
-    // Update is called once per frame
-    void Update()
+    public TMP_Text gameTimer;
+    private string gameTimerText;
+
+    public TMP_Text waveCount;
+    private string waveCountText;
+
+    public TMP_Text killCountl;
+    public string killCountlText;
+
+    private void Start()
     {
-        
+        gameManager = GameManager.Instance;
+        waveManager = FindFirstObjectByType<WaveManager>();
+    }
+    private void Update()
+    {
+        gameTimerText = string.Format("{0:00}:{1:00}:{2:00}", gameManager.hours, gameManager.minutes, gameManager.timer);
+        gameTimer.text = gameTimerText;
+
+        waveCountText = "Wave " + (waveManager.waveIndex + 1);
+        waveCount.text = waveCountText;
+
+        killCountlText = ": " + gameManager.killCount;
     }
 }
