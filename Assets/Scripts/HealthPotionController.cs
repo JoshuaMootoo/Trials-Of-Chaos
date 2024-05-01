@@ -11,6 +11,7 @@ public class HealthPotionController : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             collision.transform.GetComponent<PlayerController>().HealDamage(healthAmount);
+            Destroy(gameObject);
         }
     }
 }

@@ -8,6 +8,7 @@ TagManager:
   - WaveManager
   - LevelManager
   - Level
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -18,9 +19,9 @@ TagManager:
   - Enemy
   - Player Weapon
   - Ground
-  - 
-  - 
-  - 
+  - Player
+  - Enemy Arrow
+  - Player Arrow
   - 
   - 
   - 

@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
         damage = startDamage;
         dodgeSpeed = startDodgeSpeed;
 
-        weaponsNum = Random.Range(1, 4);
+        //weaponsNum = Random.Range(1, 4);
     }
 
     //------------------------------------------------------------------------------------
@@ -257,12 +257,14 @@ public class PlayerController : MonoBehaviour
     {
         canAttack = false;
         anim.SetTrigger("SwordAttack");
+        weapons[0].transform.GetComponent<MeleeWeaponDamage>().playerDamage = damage;
         StartCoroutine(ResetAttackCooldown());
     }
     public void PlayerAxeAttack()
     {
         canAttack = false;
         anim.SetTrigger("AxeAttack");
+        weapons[1].transform.GetComponent<MeleeWeaponDamage>().playerDamage = damage;
         StartCoroutine(ResetAttackCooldown());
     }
     public void PlayerBowAttack()

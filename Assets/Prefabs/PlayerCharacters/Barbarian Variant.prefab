@@ -87,6 +87,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: crossbow_2handed
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4784bcca96200764b8b151570a3f6894, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -177,8 +181,12 @@ PrefabInstance:
       value: sword_1handed
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a93f04fbc33a4c648be028c3c8213346, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a93f04fbc33a4c648be028c3c8213346, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -215,8 +223,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.50344455, y: 1.7752614, z: 0.13063347}
-  m_Center: {x: -0.000003605429, y: 1.05, z: -0.000000012362767}
+  m_Size: {x: 0.50344455, y: 2.5, z: 0.5}
+  m_Center: {x: -0.000003605429, y: 1.25, z: 0}
 --- !u!114 &856790989348643325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,6 +237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee66ae134ab520d45bc8861f68155d9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerDamage: 0
 --- !u!4 &3181289055764722400 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a93f04fbc33a4c648be028c3c8213346, type: 3}
@@ -291,8 +300,12 @@ PrefabInstance:
       value: axe_2handed
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 7769681b5a6d1344494c40ee5c1cfe4f, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7769681b5a6d1344494c40ee5c1cfe4f, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -329,8 +342,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.2395486, y: 1.7246283, z: 0.26180083}
-  m_Center: {x: 0.0000000127951365, y: 1.35, z: 0.0000011301909}
+  m_Size: {x: 1.2395486, y: 1.7246283, z: 1.25}
+  m_Center: {x: 0.0000000127951365, y: 1.35, z: -0.5}
 --- !u!114 &9046022376657802601
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343,6 +356,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee66ae134ab520d45bc8861f68155d9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerDamage: 0
 --- !u!4 &5375567408255068484 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7769681b5a6d1344494c40ee5c1cfe4f, type: 3}
@@ -402,7 +416,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8242c585b5b71064cba4f5171103c399, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 8242c585b5b71064cba4f5171103c399, type: 3}
       propertyPath: m_LocalPosition.x
@@ -721,8 +735,16 @@ PrefabInstance:
       value: Barbarian Variant
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8242c585b5b71064cba4f5171103c399, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8242c585b5b71064cba4f5171103c399, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8242c585b5b71064cba4f5171103c399, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 1728280593283003582, guid: 8242c585b5b71064cba4f5171103c399, type: 3}
       propertyPath: m_TagString
@@ -1041,8 +1063,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1456a9574db3a374e8f62539a0ee21a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputManager: {fileID: 0}
   startHealth: 100
-  startDamage: 10
+  startDamage: 50
   startSpeed: 10
   startDodgeSpeed: 20
   health: 0

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Skeleton Brute
   m_EditorClassIdentifier: 
   enemyName: Skeleton Brute
-  health: 20
-  damage: 10
-  speed: 10
+  health: 40
+  damage: 20
+  speed: 0.5
+  scoreAmount: 50

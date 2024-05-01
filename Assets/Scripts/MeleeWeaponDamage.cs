@@ -5,6 +5,7 @@ using UnityEngine;
 public class MeleeWeaponDamage : MonoBehaviour
 {
     PlayerController player;
+    public float playerDamage;
 
     private void Start()
     {
@@ -13,9 +14,10 @@ public class MeleeWeaponDamage : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Enemy" && player.canAttack && player.AttackButtonPressed)
+        if (collision.gameObject.tag == "Enemy")
         {
-            collision.gameObject.GetComponent<EnemyBehavior>().TakeDamage(player.damage);
+            Debug.Log("Player Has Hit Enemy");
+            collision.gameObject.GetComponent<EnemyBehavior>().TakeDamage(playerDamage);
         }
     }
 }

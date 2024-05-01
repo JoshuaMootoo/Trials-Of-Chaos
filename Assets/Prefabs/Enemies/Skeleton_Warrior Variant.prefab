@@ -504,6 +504,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 7b6da3e49f9d3894a8981ba12c1440e7, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 1728280593283003582, guid: 7b6da3e49f9d3894a8981ba12c1440e7, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -864,8 +868,12 @@ MonoBehaviour:
   speed: 0
   multiplier: 1
   isBoss: 0
+  spawnedFromBoss: 0
   stopDistance: 0
-  outOfBoundsDistance: 0
+  outOfBoundsDistance: 25
+  turnSmoothTime: 0.05
+  EXPCrystal: {fileID: 2930987217029024921, guid: 73b4a5ceed7e9264e84683a8669050bc, type: 3}
+  HealthItem: {fileID: 845672255264051514, guid: a2f9af4f2f620e5418fc9241da0bcd1e, type: 3}
 --- !u!114 &3104733848854900259
 MonoBehaviour:
   m_ObjectHideFlags: 0

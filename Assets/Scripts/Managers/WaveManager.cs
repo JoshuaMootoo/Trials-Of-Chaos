@@ -76,7 +76,12 @@ public class WaveManager : MonoBehaviour
 
         var enemyClone = Instantiate(enemy, spawnPos, Quaternion.identity);
         enemyClone.GetComponent<EnemyBehavior>().multiplier = currentMultiplier;
+        enemyClone.GetComponent<EnemyBehavior>().spawnedFromBoss = false;
         if (!isBoss) currentEnemyCount++;
-        else currentBossCount++;
+        else
+        {
+            currentBossCount++;
+            enemyClone.GetComponent<BossEnemy>().spawnMultiplier = currentMultiplier;
+        }
     }
 }

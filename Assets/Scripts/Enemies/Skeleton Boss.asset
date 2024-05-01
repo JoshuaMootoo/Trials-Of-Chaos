@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Skeleton Boss
   m_EditorClassIdentifier: 
   enemyName: Skeleton Knight
-  health: 40
+  health: 100
   damage: 20
-  speed: 5
+  speed: 0.5
+  scoreAmount: 100

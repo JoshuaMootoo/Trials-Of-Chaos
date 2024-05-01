@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Skeleton Knight
   m_EditorClassIdentifier: 
   enemyName: Skeleton Knight
-  health: 40
+  health: 20
   damage: 20
-  speed: 5
+  speed: 1
+  scoreAmount: 10

@@ -21,9 +21,8 @@ public class EXPCrystalController : MonoBehaviour
 
         float playerDistance = Vector3.Distance(transform.position, player.transform.position);
 
-        Vector3 directionOfPlayer = new Vector3(player.transform.position.x - transform.position.x, 0f, player.transform.position.z - transform.position.z);
 
-        if (playerDistance <= 5) transform.Translate(directionOfPlayer * 10 * Time.fixedDeltaTime);
+        if (playerDistance <= 10) Vector3.MoveTowards(transform.position, player.transform.position, 1);
 
     }
 
@@ -31,7 +30,9 @@ public class EXPCrystalController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
+            Debug.Log("Has collided with Player, Player has gained " + xpAmount + " EXP");
             collision.transform.GetComponent<PlayerController>().GainExp(xpAmount);
+            Destroy(gameObject);
         }
     }
 }

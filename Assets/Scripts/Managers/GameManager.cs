@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
 
     public int playerScore;
 
-    public bool isFinalWave = false;
+    public bool isFinalWave;
 
     private void Awake()
     {
@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
         }
         if (currentState == GameStates.Playing)
         {
+            FindFirstObjectByType<GameplayUI>().SwapUI(false);
             TimerUpdate();
         }
         if (currentState == GameStates.Paused)
@@ -80,14 +81,6 @@ public class GameManager : MonoBehaviour
     public void Pause()
     {
         Time.timeScale = 0f;
-        if (isPlayerDead)
-        {
-
-        }
-        else
-        {
-
-        }
     }
 
     public void Resume(bool wasPaused)
@@ -100,6 +93,9 @@ public class GameManager : MonoBehaviour
 
     public void GameOver(bool hasDied)
     {
+        FindFirstObjectByType<GameplayUI>().EndGameText(hasDied);
+        FindFirstObjectByType<GameplayUI>().SwapUI(true);
+
         Time.timeScale = 0;
     }
     #region Game Timer

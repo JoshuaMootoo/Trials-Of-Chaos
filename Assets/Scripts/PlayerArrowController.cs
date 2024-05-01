@@ -13,7 +13,11 @@ public class PlayerArrowController : MonoBehaviour
         player = FindAnyObjectByType<PlayerController>();
         damage = player.damage;
     }
-
+    private void Update()
+    {
+        float playerDistance = Vector3.Distance(transform.position, player.transform.position);
+        if (playerDistance > 30) Destroy(gameObject);
+    }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Enemy") 
