@@ -18,16 +18,16 @@ public class InputManager : MonoBehaviour
     [SerializeField] private string dodge = "Dodge";
     [SerializeField] private string attack = "Attack";
     [SerializeField] private string pause = "Pause";
-
-    //  Menu Actions
-    [SerializeField] private string navigation = "Navigation";
-    [SerializeField] private string confirm = "Confirm";
-    [SerializeField] private string back = "Back";
-
+    
     private InputAction moveAction;
     private InputAction dodgeAction;
     private InputAction attackAction;
     private InputAction pauseAction;
+
+    //  Menu Actions
+    [SerializeField] private string navigation = "Navigation";
+    [SerializeField] private string confirm = "Confirm";
+    [SerializeField] private string back = "Back";    
 
     private InputAction navigationAction;
     private InputAction confirmAction;
@@ -49,7 +49,7 @@ public class InputManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else Destroy(gameObject);
+        else Destroy(this.gameObject);
 
         moveAction = playerInputs.FindActionMap(gamePlay).FindAction(move);
         dodgeAction = playerInputs.FindActionMap(gamePlay).FindAction(dodge);

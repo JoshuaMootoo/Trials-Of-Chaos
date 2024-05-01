@@ -27,7 +27,7 @@ public class ArcherEnemy : MonoBehaviour
     }
     public void OnShoot()
     {
-        var arrow = Instantiate(arrowPrefab, crossbowPos.position, enemy.transform.rotation);
+        var arrow = Instantiate(arrowPrefab, crossbowPos.position, Quaternion.Euler(enemy.transform.rotation.x, enemy.transform.rotation.y, enemy.transform.rotation.z));
         arrow.GetComponent<Rigidbody>().velocity = transform.forward * arrowSpeed;
         arrow.GetComponent<EnemyArrow>().damage = enemy.damage;
     }

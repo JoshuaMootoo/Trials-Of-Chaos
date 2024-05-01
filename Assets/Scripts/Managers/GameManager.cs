@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public static GameStates currentState;
-    bool isPlayerDead;
+    public bool isPlayerDead;
 
     public PlayerController player;
 
@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        currentState = GameStates.Playing;
+        currentState = GameStates.Menu;
     }
 
     private void Update()
@@ -52,6 +52,10 @@ public class GameManager : MonoBehaviour
 
     private void GameStateManager()
     {
+        if (currentState == GameStates.Menu)
+        {
+            isPlayerDead = true;
+        }
         if (currentState == GameStates.OnGameStart)
         {
             player = FindFirstObjectByType<PlayerController>();
@@ -59,7 +63,6 @@ public class GameManager : MonoBehaviour
         }
         if (currentState == GameStates.Playing)
         {
-            FindFirstObjectByType<GameplayUI>().SwapUI(false);
             TimerUpdate();
         }
         if (currentState == GameStates.Paused)
@@ -96,7 +99,7 @@ public class GameManager : MonoBehaviour
         FindFirstObjectByType<GameplayUI>().EndGameText(hasDied);
         FindFirstObjectByType<GameplayUI>().SwapUI(true);
 
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
     }
     #region Game Timer
     //------------------------------------------------------------------------------------

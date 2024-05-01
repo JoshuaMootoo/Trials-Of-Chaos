@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     //  Health Vaeiables
     public float health;
     public float maxHealth;
+    bool isDead = false;
 
     //  Movement Variables
     public float movementSpeed;
@@ -175,7 +176,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        moveVector = inputManager.MoveInput;
+        if (!isDead) moveVector = inputManager.MoveInput;
         if (moveVector != Vector2.zero) anim.SetBool("IsMoving", true);
         else anim.SetBool("IsMoving", false);
 
@@ -307,9 +308,12 @@ public class PlayerController : MonoBehaviour
     // Death Function, Executed when the players health goes below 0
     public void OnDeath() 
     {
+        dodgeSpeed = 0;
+        GameManager.currentState = GameStates.GameOver;
+        isDead = true;
+        anim.SetBool("Dead", true);
         Debug.Log("Player has died");
         GameManager.Instance.GameOver(true);
-        Destroy(gameObject);
     }
     #endregion
 

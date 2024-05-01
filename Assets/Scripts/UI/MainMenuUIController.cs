@@ -10,6 +10,7 @@ public class MainMenuUIController : MonoBehaviour
     public void StartButton()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        GameManager.currentState = GameStates.OnGameStart;
     }
 
     public void QuitButton()

@@ -22,6 +22,6 @@ public class CameraFollow : MonoBehaviour
             Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
             transform.position = smoothedPosition;
         }
-        else Debug.LogError("Unable to find Player Object");
+
     }
 }

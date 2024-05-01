@@ -76,7 +76,7 @@ public class EnemyBehavior : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, angle, 0);
 
         //  This triggers the Death Function if the distance Between the Player Exceeds the outOfBoundsDistance
-        if (playerDistance > outOfBoundsDistance && !isBoss && !spawnedFromBoss) OnDeath(isBoss, true);
+        if (playerDistance > outOfBoundsDistance && !isBoss) OnDeath(isBoss, true);
     }
 
     //------------------------------------------------------------------------------------
@@ -99,17 +99,18 @@ public class EnemyBehavior : MonoBehaviour
     public void OnDeath(bool isBoss, bool outOfBound)
     {
         Debug.Log(enemyTraits.enemyName+ " has died");
-
-        GameManager.Instance.playerScore += enemyTraits.scoreAmount;
-
-        GameManager.Instance.killCount++;
-
+        if (!outOfBound || isBoss)
+        {
+            GameManager.Instance.playerScore += enemyTraits.scoreAmount;
+            GameManager.Instance.killCount++;
+        }
         anim.SetBool("isDead", true);
 
         if (!isBoss)
         {
-            if (!spawnedFromBoss) waveManager.currentEnemyCount -= 1;
-            else FindFirstObjectByType<BossEnemy>().spawnCount -= 1;
+            //if (!spawnedFromBoss) 
+                waveManager.currentEnemyCount -= 1;
+            //else FindFirstObjectByType<BossEnemy>().spawnCount -= 1;
             if (!outOfBound)
             {
                 Instantiate(EXPCrystal, transform.position, Quaternion.identity);
@@ -117,13 +118,10 @@ public class EnemyBehavior : MonoBehaviour
                 if (healthSpawnChance <= 90) Instantiate(HealthItem, transform.position, Quaternion.identity);
             }
         }
-        else GameManager.Instance.GameOver(false);
-        StartCoroutine(WaitToDestroy());
-    }
-
-    IEnumerator WaitToDestroy()
-    {
-        yield return new WaitForSeconds(1);
-        Destroy(gameObject);
+        else
+        {
+            GameManager.Instance.isPlayerDead = false;
+            GameManager.currentState = GameStates.GameOver;
+        }
     }
 }

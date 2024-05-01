@@ -9,15 +9,17 @@ public class GameplayUI : MonoBehaviour
     GameManager gameManager;
     WaveManager waveManager;
 
-    public GameObject gameplayPanel;
-    public GameObject endGamePanel;
+    public CanvasGroup gameplayPanel;
+    public CanvasGroup endGamePanel;
 
     //  Gameplay UI
+    public TMP_Text playerHealthxt;
     public TMP_Text scoreTxt;
     public TMP_Text timerTxt;
     public TMP_Text waveCountTxt;
     public TMP_Text killCountTxt;
 
+    private string playerHealthString;
     private string scoreString;
     private string gameTimerString;
     private string waveCountString;
@@ -34,14 +36,18 @@ public class GameplayUI : MonoBehaviour
     {
         gameManager = GameManager.Instance;
         waveManager = FindFirstObjectByType<WaveManager>();
+
+        SwapUI(false);
     }
     public void GameplayUIUpdate()
     {
+        if (FindAnyObjectByType<PlayerController>() != null) playerHealthString = "Health: " + FindAnyObjectByType<PlayerController>().health + "/" + FindAnyObjectByType<PlayerController>().startHealth * FindAnyObjectByType<PlayerController>().levelMultiplier;
         scoreString = "Score: " + gameManager.playerScore;
         gameTimerString = string.Format("{0:00}:{1:00}:{2:00}", gameManager.hours, gameManager.minutes, gameManager.timer);
         waveCountString = "Wave: " + (waveManager.waveIndex + 1);
         killCountlString = "Kills: " + gameManager.killCount;
 
+        playerHealthxt.text = playerHealthString;
         timerTxt.text = gameTimerString;
         scoreTxt.text = scoreString;
         waveCountTxt.text = waveCountString;
@@ -67,8 +73,20 @@ public class GameplayUI : MonoBehaviour
 
     public void SwapUI(bool endGame) 
     {
-        gameplayPanel.SetActive(!endGame);
-        endGamePanel.SetActive(endGame);
+        if (endGame)
+        {
+            gameplayPanel.alpha = 0;
+            endGamePanel.alpha = 1;
+            gameplayPanel.interactable = false;
+            endGamePanel.interactable = true;
+        }
+        else
+        {
+            gameplayPanel.alpha = 1;
+            endGamePanel.alpha = 0;
+            gameplayPanel.interactable = true;
+            endGamePanel.interactable = false;
+        }
     }
 
     private void Update()
@@ -78,6 +96,7 @@ public class GameplayUI : MonoBehaviour
 
     public void QuitToMenu()
     {
+        GameManager.currentState = GameStates.Menu;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 }

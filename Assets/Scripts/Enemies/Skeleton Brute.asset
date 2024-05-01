@@ -15,5 +15,5 @@ MonoBehaviour:
   enemyName: Skeleton Brute
   health: 40
   damage: 20
-  speed: 0.5
+  speed: 1
   scoreAmount: 50
